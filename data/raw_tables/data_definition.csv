@@ -1,0 +1,34 @@
+table,column,type,unit_or_values,description
+patients,patient_id,integer,1-1000,患者を一意に識別するID
+patients,followup_start,date,YYYY-MM-DD,フォローアップ開始日（患者ごとに異なる。全員同一日ではない）
+patients,age,integer,years,追跡開始時点の実年齢（平均65歳前後）
+patients,sex,character,M / F,性別（M=男性、F=女性）
+patients,smoking,integer,0 / 1,喫煙（1=あり、0=なし）。時間で変化しないbaseline共変量
+patients,hypertension,integer,0 / 1,高血圧の既往（1=あり、0=なし）。baseline共変量
+patients,dyslipidemia,integer,0 / 1,脂質異常症の既往（1=あり、0=なし）。baseline共変量
+prescriptions,patient_id,integer,1-1000,患者ID（patientsテーブルと対応）
+prescriptions,date,date,YYYY-MM-DD,その処方レコードの日付（月次で記録）
+prescriptions,metformin_dose,integer,mg (0-1500),その月のメトホルミン1日用量。初期用量は500mg。0は中止。500超は増量状態
+labs,patient_id,integer,1-1000,患者ID（patientsテーブルと対応）
+labs,date,date,YYYY-MM-DD,その検査レコードの日付（今回は毎月測定の想定）
+labs,hba1c,numeric,percent (%),HbA1cの実測値
+events,patient_id,integer,1-1000,患者ID（patientsテーブルと対応）
+events,followup_start,date,YYYY-MM-DD,追跡開始日（patientsのfollowup_startと同一）
+events,end_date,date,YYYY-MM-DD,イベント発症者はイベント発生日。非発症者は追跡終了日（最大6か月）
+events,followup_months,integer,1-6,追跡できた月数。イベント発症月まで、または最大6
+events,cvd_event,integer,0 / 1,追跡期間中の心血管イベント（1=発症、0=非発症）
+person_interval,patient_id,integer,1-1000,患者ID
+person_interval,month,integer,1-6,追跡開始からの月（1が初月）。person-intervalの時間軸
+person_interval,hba1c,numeric,percent (%),その月のHbA1c実測値
+person_interval,metformin_dose,integer,mg (0-1500),その月のメトホルミン用量
+person_interval,metformin_high,integer,0 / 1,その月に増量状態にあるか（1=初期用量500mgより高い用量で治療中）。据え置き・減量・中止は0。治療変数A。month=1から両群が存在
+person_interval,cvd_event,integer,0 / 1,その月に心血管イベントが起きたか（1=発症）。アウトカムY
+person_interval,followup_start,date,YYYY-MM-DD,追跡開始日（baseline情報。全月同値）
+person_interval,age,integer,years,追跡開始時の実年齢（baseline共変量。全月同値）
+person_interval,sex,character,M / F,性別（baseline共変量。全月同値）
+person_interval,smoking,integer,0 / 1,喫煙（baseline共変量。全月同値）
+person_interval,hypertension,integer,0 / 1,高血圧（baseline共変量。全月同値）
+person_interval,dyslipidemia,integer,0 / 1,脂質異常症（baseline共変量。全月同値）
+person_interval,hba1c_high,integer,0 / 1,HbA1cが7.5%以上か（1=高値）。hba1cを二値化した時間依存交絡L
+person_interval,hba1c_high_prev,integer,0 / 1,前月のhba1c_high（初月は0）。MSM/g-formulaで使う履歴変数
+person_interval,metformin_high_prev,integer,0 / 1,前月のmetformin_high（初月は0）。MSM/g-formulaで使う履歴変数
