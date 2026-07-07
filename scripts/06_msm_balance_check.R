@@ -20,7 +20,7 @@ if (file.exists("scripts/05_msm_stabilized_weight.R")) {
 #  が目安。時間依存治療では baseline だけでなく各月で見る（実務では cobalt::bal.tab）。
 #  ※ パッケージ（cobalt, ggplot2）は 03_msm_load_data.R でロード済み
 # ==============================================================================
-cov_list <- c("hba1c_high", "age_z", "smoking", "hypertension", "dyslipidemia")
+cov_list <- c("hba1c_high", "age_z", "sex", "smoking", "hypertension", "dyslipidemia")
 
 cat("=== ステップ7：cobalt::bal.tab による各月の共変量バランス ===\n")
 summary_list <- list()

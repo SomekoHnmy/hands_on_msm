@@ -98,7 +98,7 @@ dat <- generate_data3(1000, intervene = NA, seed = 123)
 den <- glm(A ~ L1 + L2 + L3 + L1prev + L2prev + L3prev + Aprev +
              age + smk + htn + dys + factor(month),
            family = binomial, data = dat)
-num <- glm(A ~ Aprev + age + smk + htn + dys + factor(month),
+num <- glm(A ~ Aprev + factor(month),
            family = binomial, data = dat)
 
 dat$fd <- ifelse(dat$A == 1, predict(den, type="response"), 1 - predict(den, type="response"))
@@ -107,6 +107,7 @@ dat <- dat[order(dat$id, dat$month), ]
 dat$sw   <- ave(dat$fn / dat$fd, dat$id, FUN = cumprod)
 dat$cumA <- ave(dat$A, dat$id, FUN = cumsum)
 
+# (weights による無害な non-integer 警告が出ますが、無視して構いません)
 msm <- glm(Y ~ A + cumA + factor(month), family = binomial, data = dat, weights = sw)
 cuminc <- function(a) {
   s <- 1
@@ -203,7 +204,7 @@ gf3 <- gformula(
   intvars       = intvars,
   interventions = interventions,
   int_descript  = int_descript,
-  ref_int       = 0,          # 参照は「常に非増量」
+  ref_int       = 1,          # 参照は「常に非増量 (1)」
   nsimul        = 10000,
   nsamples      = 200,        # bootstrap 標本数
   parallel      = FALSE,

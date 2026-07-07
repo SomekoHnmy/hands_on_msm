@@ -19,13 +19,12 @@ if (file.exists("scripts/03_msm_load_data.R")) {
 # ------------------------------------------------------------------------------
 #  安定化重みの分子・分母を作るための2つのモデル。
 #    分母：交絡をすべて入れて治療状態を予測（時間依存交絡 hba1c_high と履歴も）
-#    分子：baseline と治療履歴だけ（hba1c_high は入れない）＝重みを安定化する
+#    分子：治療履歴だけ（hba1c_high や baseline は入れない。分子に入れた変数は最終モデルにも入れて整合させる必要があるため）
 # ==============================================================================
 den <- glm(metformin_high ~ hba1c_high + hba1c_high_prev + metformin_high_prev +
-             age_z + smoking + hypertension + dyslipidemia + factor(month),
+             age_z + sex + smoking + hypertension + dyslipidemia + factor(month),
            family = binomial, data = dat)
-num <- glm(metformin_high ~ metformin_high_prev +
-             age_z + smoking + hypertension + dyslipidemia + factor(month),
+num <- glm(metformin_high ~ metformin_high_prev + factor(month),
            family = binomial, data = dat)
 
 # 予測確率は 0/1 に貼りつかないようクリップしておく

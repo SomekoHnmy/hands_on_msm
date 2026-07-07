@@ -75,6 +75,9 @@ build_person_interval <- function(patients, prescriptions, labs, events) {
     for (m in seq_len(n_months)) {
       # 増量状態：その月の用量が初期用量 500 より高いか
       metformin_high <- as.integer(pr$metformin_dose[m] > 500)
+      # 【実務注記】このシミュレーションデータでは「心血管イベントが発生した月にログが止まる」
+      # というデータ生成側の都合を利用したショートカットを行っています。
+      # 実データ解析では、イベント発生日と各月区間の日付を正確に突き合わせてフラグを作成する必要があります。
       cvd <- if (m == n_months && ev$cvd_event == 1) 1L else 0L
 
       rows[[length(rows) + 1]] <- data.frame(
@@ -90,6 +93,9 @@ build_person_interval <- function(patients, prescriptions, labs, events) {
 
   pi <- do.call(rbind, rows)
   pi <- merge(pi, patients, by = "patient_id", all.x = TRUE)
+  # 【注記】patients マスタには sex（性別）が含まれています。本シミュレーションのデータ生成ロジック(DGP)では
+  # 実質的に非交絡ですが、実務の慣例に合わせ、かつ「なぜ性別は調整しないのか」という疑問に配慮し、
+  # 時間非依存交絡（baseline 共変量）として以降のすべての解析モデルに含めて調整を行っています。
   pi <- pi[order(pi$patient_id, pi$month), ]
 
   # --- 時間依存交絡を二値化：HbA1c が 7.5% 以上か ---

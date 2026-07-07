@@ -126,7 +126,7 @@ make_raw <- function(n) {
       }
       L_k <- rbinom(1, 1, expit(lpL))
       hba1c <- if (L_k == 1) round(7.5 + abs(rnorm(1, 0.4, 0.3)), 1)
-               else          round(7.5 - abs(rnorm(1, 0.5, 0.3)), 1)
+               else          pmin(7.4, round(7.5 - abs(rnorm(1, 0.5, 0.3)), 1))
       lab_rows[[k]] <- data.frame(patient_id = i, date = month_date, hba1c = hba1c)
 
       # 増量状態（A_state）を生成

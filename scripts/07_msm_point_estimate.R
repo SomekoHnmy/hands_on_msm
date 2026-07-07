@@ -22,6 +22,9 @@ if (file.exists("scripts/06_msm_balance_check.R")) {
 #  各月ハザードを予測 → 生存確率を掛け合わせ → 累積発生率 → 2戦略の差。
 # ==============================================================================
 dat$cumA <- ave(dat$metformin_high, dat$patient_id, FUN = cumsum)
+# 【注】weights を指定して binomial glm を実行すると、重みが整数でないため
+# 「non-integer #successes in a binomial glm!」という警告が必ず出力されますが、
+# これは仕様通りの挙動であり、計算結果への影響はなく無害ですので無視して進めてください。
 msm <- glm(cvd_event ~ metformin_high + cumA + factor(month),
            family = binomial, data = dat, weights = sw_trunc)
 
@@ -45,4 +48,4 @@ rd_msm    <- risk_high - risk_none
 # ==============================================================================
 cat("=== ステップ9：MSM の点推定 ===\n")
 cat(sprintf("  常に増量状態 %.3f / 常に非増量 %.3f / リスク差 %+.3f\n", risk_high, risk_none, rd_msm))
-cat("  → naive（約 -0.09〜-0.11）では届かなかった真値 -0.233 に迫れた。\n\n")
+cat("  → naive（約 -0.09〜-0.11）では届かなかった真値 -0.232 に迫れた。\n\n")
