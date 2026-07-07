@@ -49,7 +49,7 @@ git を知らなくても大丈夫です。このページ上部の緑色の **C
 
 ## エージェントを使わない場合
 
-R と RStudio を自分でインストールして進めることもできます。手順は [SETUP.md](SETUP.md) を参照してください。
+R と RStudio を自分でインストールして進めることもできます。[CRAN](https://cran.r-project.org/) から R を（Mac は Apple Silicon なら arm64 版、Intel なら x86_64 版）、[Posit](https://posit.co/download/rstudio-desktop/) から RStudio Desktop をインストールし、RStudio で `scripts/` のスクリプトを番号順に開いて **Source** で実行してください（最初に Session → Set Working Directory → To Source File Location を選んでおくと確実です）。
 
 ## リポジトリ構成
 
@@ -58,7 +58,6 @@ R と RStudio を自分でインストールして進めることもできます
 | `prework_introduction.md` | 事前読み物（環境不要・コードなし） |
 | `course_guide.md` | 当日の解説・進行ガイド（講師用台本 兼 参加者用読み物） |
 | `AGENTS.md` | AI エージェント用の指示書（環境構築・実行の自動化） |
-| `SETUP.md` | 手動セットアップ手順（エージェントを使わない方向け） |
 | `scripts/01`〜`02` | 事前課題：生データの畳み込みと naive 解析 |
 | `scripts/03`〜`08` | 本番①：MSM（IP weighting） |
 | `scripts/09` | 本番②：parametric g-formula |
