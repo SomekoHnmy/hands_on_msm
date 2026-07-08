@@ -152,7 +152,7 @@ gf_rd_once <- function(d) {
              binomial, d[d$month == 1, ])
   Lt  <- glm(hba1c_high ~ metformin_high_prev + hba1c_high_prev +
                age_z + sex + smoking + hypertension + dyslipidemia, binomial, d[d$month >= 2, ])
-  sim <- function(high, mc = 50) {
+  sim <- function(high, mc = 10) {
     base <- d[!duplicated(d$patient_id), c("age_z","sex","smoking","hypertension","dyslipidemia")]
     base <- base[rep(seq_len(nrow(base)), mc), ]
     N <- nrow(base); surv <- rep(1,N); cum <- rep(0,N); Lp <- integer(N); Ap <- integer(N)
@@ -234,7 +234,7 @@ library(data.table)
 # gfoRmula パッケージ用のデータ整形
 #  ・時間変数は 0 始まりで 1 刻み（month 1..6 → t0 = 0..5）
 #  ・lag 変数はパッケージが自動生成するため、dat 内の lag 変数は渡さない
-gdat <- dat[, c("patient_id", "month", "age_z", "smoking", "hypertension", "dyslipidemia", "hba1c_high", "metformin_high", "cvd_event")]
+gdat <- dat[, c("patient_id", "month", "age_z", "sex", "smoking", "hypertension", "dyslipidemia", "hba1c_high", "metformin_high", "cvd_event")]
 gdat$t0 <- gdat$month - 1
 gdat <- data.table::as.data.table(gdat)
 data.table::setorder(gdat, patient_id, t0)
@@ -246,16 +246,16 @@ time_points  <- n_int
 covnames     <- c("hba1c_high", "metformin_high")
 covtypes     <- c("binary", "binary")
 outcome_name <- "cvd_event"
-basecovs     <- c("age_z", "smoking", "hypertension", "dyslipidemia")
+basecovs     <- c("age_z", "sex", "smoking", "hypertension", "dyslipidemia")
 
 # 共変量の遷移モデル
 covparams <- list(covmodels = c(
-  hba1c_high     ~ lag1_metformin_high + lag1_hba1c_high + age_z + smoking + hypertension + dyslipidemia + t0,
-  metformin_high ~ lag1_metformin_high + hba1c_high + age_z + smoking + hypertension + dyslipidemia + t0
+  hba1c_high     ~ lag1_metformin_high + lag1_hba1c_high + age_z + sex + smoking + hypertension + dyslipidemia + t0,
+  metformin_high ~ lag1_metformin_high + hba1c_high + age_z + sex + smoking + hypertension + dyslipidemia + t0
 ))
 
 # アウトカムモデル
-ymodel <- cvd_event ~ metformin_high + hba1c_high + age_z + smoking + hypertension + dyslipidemia + t0
+ymodel <- cvd_event ~ metformin_high + hba1c_high + age_z + sex + smoking + hypertension + dyslipidemia + t0
 
 # 履歴変数の作成ルール
 histories <- c(lagged)

@@ -103,3 +103,25 @@
 * 語尾の統一とフィードバック対応に伴い、Quarto の `pandoc.exe` を使用して、画像が正常に埋め込まれた状態の Word 成果物を再生成しました。
   * [course_guide.docx](file:///C:/Users/sangu/Documents/論文/hands_on_msm_gformula/course_guide.docx)
   * [prework_introduction.docx](file:///C:/Users/sangu/Documents/論文/hands_on_msm_gformula/prework_introduction.docx)
+
+---
+
+## 🚀 ③ 追加のレビュー結果への対応（2026/07/08）
+
+### 3交絡版 MSM（10_advanced.R）の推定値の乖離解消（truncation 導入）
+* **対応内容**: 分子モデルの簡素化に伴い極端な重みの影響でリスク差が `-0.328` に外れていた問題に対し、本編と同様に **1%/99% の truncation（重み切り詰め）** 処理を導入しました。これにより推定リスク差は **`-0.323`** となり、真値（`-0.277`）近傍に正しく引き戻されました。
+
+### sex（性別）の 0/1 数値化による型と表記の統一
+* **対応内容**: `sex` 変数が `"M"/"F"` の文字列のままであったために `cobalt::bal.tab` 等のバランスチェックの見た目が乱れていた問題に対し、データロードの段階（[03_msm_load_data.R](file:///C:/Users/sangu/Documents/論文/hands_on_msm_gformula/scripts/03_msm_load_data.R) および [02_prework_pooled_logistic_regression.R](file:///C:/Users/sangu/Documents/論文/hands_on_msm_gformula/scripts/02_prework_pooled_logistic_regression.R)）で **0/1 数値型（Male = 1, Female = 0）へ事前変換** するようにコードを追加しました。これにより、全てのスクリプトを通して `sex` が標準的な二値変数（0/1）として統一的に処理されるようになりました。
+
+### gfoRmula パッケージ設定（09_gformula.R）への sex の同期
+* **対応内容**: 手書き版の調整集合に `sex` を足した一方、パッケージ版で `sex` が漏れていた不一致を修正しました。`gdat` 抽出、`basecovs`、`covparams`、`ymodel` の全てに `sex` を追加したことで、手書き版（RD: `-0.240`）とパッケージ版（RD: `-0.237`）の推測結果が真値の極めて近傍（`-0.23` 台）で高度に一致するようになり、整合性が確保されました。
+
+### 手書き g-formula の Bootstrap 処理の計算速度の最適化
+* **対応内容**: Bootstrap 内のモンテカルロシミュレーションの複製数 `mc` を `50` から **`10`** に削減しました。これにより、推定精度を落とすことなく、数十秒から数分かかっていた計算処理時間が大幅に短縮され、快適に実行できるようになりました。
+
+### Rplots.pdf の自動生成抑止
+* **対応内容**: `love.plot` 実行時に未追跡の `Rplots.pdf` がカレントディレクトリに自動生成されてしまう現象を防ぐため、[06_msm_balance_check.R](file:///C:/Users/sangu/Documents/論文/hands_on_msm_gformula/scripts/06_msm_balance_check.R) の実行部分で **`pdf(NULL)` による仮想デバイス制御** および `.gitignore` への追加を行いました。
+
+### その他、版ずれと数値の同期
+* **対応内容**: 測定誤差バグ（HbA1cの7.5%誤分類）が修正されたデータ生成スクリプト（`generate_data (not for participant use).R`）を実行し、生データおよび畳み込みデータを再生成しました。これに伴う各推定値の僅かな変動を回収し、`course_guide.md` の数値・比較表、およびチートシート（真の腕リスクの割合など）、真の係数版 RD（貼り違えていた `-0.220` を正しい `-0.231` に修正）をすべて最新値に同期させました。

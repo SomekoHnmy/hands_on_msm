@@ -105,6 +105,9 @@ dat$fd <- ifelse(dat$A == 1, predict(den, type="response"), 1 - predict(den, typ
 dat$fn <- ifelse(dat$A == 1, predict(num, type="response"), 1 - predict(num, type="response"))
 dat <- dat[order(dat$id, dat$month), ]
 dat$sw   <- ave(dat$fn / dat$fd, dat$id, FUN = cumprod)
+# 極端な重みを 1%/99% で切り詰める (truncation)
+q <- quantile(dat$sw, c(0.01, 0.99))
+dat$sw <- pmin(pmax(dat$sw, q[1]), q[2])
 dat$cumA <- ave(dat$A, dat$id, FUN = cumsum)
 
 # (weights による無害な non-integer 警告が出ますが、無視して構いません)

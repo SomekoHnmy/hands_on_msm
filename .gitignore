@@ -1,0 +1,8 @@
+temp/
+Rplots.pdf
+.Rhistory
+.RData
+.Rproj.user/
+*.Rhistory
+*.RData
+*.docx

@@ -34,7 +34,7 @@
 
 - 実行は原則**リポジトリのルート**で行ってください（スクリプトはルート／`scripts/` どちらからでも動くよう相対パスを自動判定しますが、ルートが基本です）。
 - 実行例:
-  - **Windows (PowerShell)**: `& "C:\Program Files\R\R-4.4.2\bin\Rscript.exe" scripts/01_prework_generate_person_data.R`
+  - **Windows (PowerShell)**: `& "C:\Program Files\R\R-<Version>\bin\Rscript.exe" scripts/01_prework_generate_person_data.R` （※バージョン部分は探索で見つかったパスに置き換えてください）
   - **macOS (zsh/bash)**: `Rscript scripts/01_prework_generate_person_data.R`
 
 ### 1-4. R パッケージ

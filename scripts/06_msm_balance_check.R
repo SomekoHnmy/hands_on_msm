@@ -22,6 +22,9 @@ if (file.exists("scripts/05_msm_stabilized_weight.R")) {
 # ==============================================================================
 cov_list <- c("hba1c_high", "age_z", "sex", "smoking", "hypertension", "dyslipidemia")
 
+# Rplots.pdf の自動生成を防ぐため、仮想グラフィックスデバイスを開く
+pdf(NULL)
+
 cat("=== ステップ7：cobalt::bal.tab による各月の共変量バランス ===\n")
 summary_list <- list()
 
@@ -70,3 +73,6 @@ cat("\n  【注】このシミュレーションデータでは、各月の SMD 
 cat("        しまいます。SMD は本来こうして月次で確認しますが、今回は MSM の\n")
 cat("        一連の手順を見てもらうことが目的なので、このまま進めます。\n")
 cat("        （positivity はステップ6の ESS で確認済みで、良好です）\n\n")
+
+# グラフィックスデバイスを閉じる
+if (dev.cur() > 1) dev.off()

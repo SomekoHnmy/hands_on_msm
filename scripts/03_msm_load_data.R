@@ -34,6 +34,8 @@ if (file.exists("data/person_interval.csv")) {
 }
 n_int <- max(dat$month)
 dat$age_z <- (dat$age - mean(dat$age)) / sd(dat$age)   # 年齢は標準化
+# 性別を 0/1 数値型に変換（M = 1, F = 0）
+dat$sex <- ifelse(dat$sex == "M", 1L, 0L)
 dat <- dat[order(dat$patient_id, dat$month), ]
 cat(sprintf("データ: %d 行, %d 人, 増量状態割合 %.3f\n\n",
             nrow(dat), length(unique(dat$patient_id)), mean(dat$metformin_high)))

@@ -26,6 +26,9 @@ n_int <- 6
 # 年齢の標準化（モデルの予測・計算の安定化のため）
 d$age_z <- (d$age - mean(d$age)) / sd(d$age)
 
+# 性別を 0/1 数値型に変換（M = 1, F = 0）
+d$sex <- ifelse(d$sex == "M", 1L, 0L)
+
 # 予測から6か月累積発生率・リスク差を出す補助関数
 risk_diff_from_glm <- function(model, data, use_L) {
   base <- data[!duplicated(data$patient_id),
